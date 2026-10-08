@@ -35,6 +35,8 @@ Free accounts sign for 7 days. After that the app stops launching until you buil
 
 Upstream's [BUILDING.md](BUILDING.md) has the rest.
 
+Two caveats for anyone trying the Xcode route: Signal.entitlements lists more capabilities than a free Apple ID can carry (app groups, keychain sharing, push, associated domains, and more), so you have to remove every one of them or use your own entitlements file, and Signal's Pods submodule points at a private repository, so `make dependencies` may need the public signalapp/Signal-Pods mirror. Neither path has been exercised here yet; the AltStore route below is the one I expect to work first.
+
 ## Install the CI build
 
 The workflow in `.github/workflows/build-unsigned.yml` builds `Wren-unsigned.ipa` and uploads it with a SHA-256 file. Run it from the Actions tab, or push a tag that starts with `v` and it also lands in a draft release. GitHub's macOS runners are free for public repos only, so it needs this repo to be public.
