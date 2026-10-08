@@ -1,12 +1,12 @@
 # Wren for iOS
 
-Wren iOS is a fork of Signal-iOS that I rebranded so it can sit next to the Android and Desktop Wren clients. Right now it is a rebrand and a CI build, nothing more.
+Wren iOS is a fork of Signal-iOS that I rebranded so it can sit next to the Android and Desktop Wren clients. Right now it is a rebrand and a CI recipe, nothing more.
 
 Three limits, before anything else:
 
 1. No push notifications. iOS delivers Signal's pushes through Apple's push service (APNs), and those are tied to Signal's own app id and certificate. Wren has a different bundle id and I have no Apple Developer account, so Apple will never wake it. Messages arrive only while the app is open in the foreground. More in [docs/NOTIFICATIONS.md](docs/NOTIFICATIONS.md).
 2. Sideloading lasts 7 days. Without a paid Apple account, a free Apple ID gets you an AltStore or Sideloadly install that expires after a week. You have to re-sign it every 7 days.
-3. Nothing here has been built yet. I have no Mac and no Xcode. The code in this repo has never been compiled by me, and the CI workflow has not run. Treat every claim below about the build as untested until a CI run goes green.
+3. Nothing here has been built yet. I have no Mac and no Xcode.No IPA has built successfully yet; the CI build is being fixed (see Actions). Treat every claim below about the build as untested until a CI run goes green.
 
 ## What should work
 
@@ -35,12 +35,11 @@ Free accounts sign for 7 days. After that the app stops launching until you buil
 
 Upstream's [BUILDING.md](BUILDING.md) has the rest.
 
-Two caveats for anyone trying the Xcode route: Signal.entitlements lists more capabilities than a free Apple ID can carry (app groups, keychain sharing, push, associated domains, and more), so you have to remove every one of them or use your own entitlements file, and Signal's Pods submodule points at a private repository, so `make dependencies` may need the public signalapp/Signal-Pods mirror. Neither path has been exercised here yet; the AltStore route below is the one I expect to work first.
+Two caveats for anyone trying the Xcode route: Signal.entitlements lists more capabilities than a free Apple ID can carry (app groups, keychain sharing, push, associated domains, and more), so you have to remove every one of them or use your own entitlements file. Neither path has been exercised here yet; the AltStore route below is the one I expect to work first.
 
 ## Install the CI build
 
-The workflow in `.github/workflows/build-unsigned.yml` builds `Wren-unsigned.ipa` and uploads it with a SHA-256 file. Run it from the Actions tab, or push a tag that starts with `v` and it also lands in a draft release. GitHub's macOS runners are free for public repos only, so it needs this repo to be public.
-
+The workflow in `.github/workflows/build-unsigned.yml` builds `Wren-unsigned.ipa` and uploads it with a SHA-256 file. Run it from the Actions tab, or push a tag that starts with `v` and it also lands in a draft release.
 The IPA is unsigned. Open it in AltStore or Sideloadly, sign in with your Apple ID, and it signs and installs the app for you. Check the hash first:
 
 ```
@@ -53,7 +52,7 @@ AltStore refreshes in the background when the phone and the computer are on the 
 
 Three options, in the order I would pick them:
 
-1. A paid developer account, Wren's own bundle id, and TestFlight. This works but needs someone 18 or older to pay 99 USD a year.
+1. A paid developer account, Wren's own bundle id, and TestFlight. This works but needs a paid Apple developer account (99 USD a year).
 2. A relay server that links to the account as a device and sends a wake-up through Wren's own APNs key, in the style of MollySocket on Android. It also needs the paid account, because the push key comes from it.
 3. Publishing to the App Store under Wren's bundle id with APNs. Same cost, more review.
 
