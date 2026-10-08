@@ -6,7 +6,7 @@ Three limits, before anything else:
 
 1. No push notifications. iOS delivers Signal's pushes through Apple's push service (APNs), and those are tied to Signal's own app id and certificate. Wren has a different bundle id and I have no Apple Developer account, so Apple will never wake it. Messages arrive only while the app is open in the foreground. More in [docs/NOTIFICATIONS.md](docs/NOTIFICATIONS.md).
 2. Sideloading lasts 7 days. Without a paid Apple account, a free Apple ID gets you an AltStore or Sideloadly install that expires after a week. You have to re-sign it every 7 days.
-3. Nothing here has been run on a phone. I have no Mac, no Xcode and no iPhone. The CI build compiles (the first green run on 2026-10-08 produced a 135 MB unsigned IPA), but nobody has installed it yet, so treat every claim below about running the app as untested.
+3. Nothing here has been run on a phone. I have no Mac, no Xcode and no iPhone. The CI build compiles (the first green run on 2026-10-08 produced a 136 MB unsigned IPA), but nobody has installed it yet, so treat every claim below about running the app as untested.
 
 ## What should work
 
