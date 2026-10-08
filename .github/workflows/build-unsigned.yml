@@ -36,22 +36,43 @@ jobs:
 
       - name: Build
         run: |
+          vm_stat
+          set -o pipefail
           xcodebuild \
             -workspace Signal.xcworkspace \
             -scheme Signal \
-            -configuration Release \
-            -sdk iphoneos \
+            -configuration "App Store Release" \
+            -destination "generic/platform=iOS" \
             -derivedDataPath build \
+            -jobs 2 \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            DEBUG_INFORMATION_FORMAT=dwarf \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            ENABLE_BITCODE=NO
+            ENABLE_BITCODE=NO \
+            build 2>&1 | tee xcodebuild.log
+          vm_stat
+
+      - name: Show build errors
+        if: failure()
+        run: |
+          vm_stat
+          grep -n -B2 -A4 -E "error:|BUILD FAILED" xcodebuild.log | tail -n 200 || true
+
+      - name: Upload build log
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: xcodebuild-log
+          path: xcodebuild.log
 
       - name: Package IPA
         run: |
           mkdir -p ipa/Payload
-          cp -R build/Build/Products/Release-iphoneos/Signal.app ipa/Payload/
+          cp -R "build/Build/Products/App Store Release-iphoneos/Signal.app" ipa/Payload/
           (cd ipa && zip -qry ../Wren-unsigned.ipa Payload)
+          ls -l Wren-unsigned.ipa
           shasum -a 256 Wren-unsigned.ipa | tee Wren-unsigned.ipa.sha256
 
       - uses: actions/upload-artifact@v6
