@@ -1,5 +1,7 @@
-# Reporting security issues in Signal-iOS
+# Security
 
-If you've found **and confirmed** a security vulnerability in Signal, please report it via email to security@signal.org.
+If you find a vulnerability in Wren iOS, email Munzzyy1@proton.me. Do not open a public issue for it.
 
-Please only use this address to report security flaws in the Signal application. For questions, support, or feature requests concerning the app, please send an email to support@signal.org, or join the [unofficial community forum](https://community.signalusers.org).
+You can expect a reply within a few days, a fix as fast as I can make one, and credit in the release notes if you want it. Problems in the Signal protocol or Signal's servers should go to Signal (security@signal.org). Bugs in inherited Signal-iOS code get reported upstream too.
+
+Wren iOS builds are unsigned and come from GitHub Actions. Check the SHA-256 that comes with the IPA before you sideload it. Signal clients expire about 90 days after their build date, so keep the app updated.
